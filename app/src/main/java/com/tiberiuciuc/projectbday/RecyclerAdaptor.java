@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,8 +64,9 @@ public class RecyclerAdaptor extends RecyclerView.Adapter<RecyclerAdaptor.MyView
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(context, MainActivity.class);
-            intent.putExtra("image_id", list[getAdapterPosition()]);
             intent.putExtra("saveAndShareClickable", true);
+            intent.putExtra("image_id", list[getAdapterPosition()]);
+//            Toast.makeText(context, "Image selected: " + list[getAdapterPosition()], Toast.LENGTH_SHORT).show();
             context.startActivity(intent);
         }
     }

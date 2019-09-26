@@ -2,6 +2,7 @@ package com.tiberiuciuc.projectbday;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -11,10 +12,15 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     Context context;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +82,16 @@ public class MainActivity extends AppCompatActivity {
 
         save.setEnabled(false);
         share.setEnabled(false);
+
+
+//        Bitmap image = BitmapFactory.decodeResource(context.getResources(), getIntent().getIntExtra("image_id", 00));
+        imageView.setImageBitmap(
+                decodeSampledBitmapFromResource(getResources(), getIntent().getIntExtra("image_id", 00), 512, 512));
+        if (getIntent().getBooleanExtra("saveAndShareClickable", false)) {
+//            imageView.setImageResource(getIntent().getIntExtra("image_id", 00));
+            save.setEnabled(true);
+            share.setEnabled(true);
+        }
 
         load.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,12 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 editText2.setText("");
             }
         });
-
-        imageView.setImageResource(getIntent().getIntExtra("image_id", 00));
-        if(getIntent().getBooleanExtra("saveAndShareClickable", false)){
-            save.setEnabled(true);
-            share.setEnabled(true);
-        }
     }
 
     public static Bitmap getScreenShot(View view) {
@@ -134,17 +145,17 @@ public class MainActivity extends AppCompatActivity {
     public void store(Bitmap bitmap, String fileName) {
         String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MEME";
         File dir = new File(dirPath);
-        if(!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdir();
         }
         File file = new File(dirPath, fileName);
-        try{
+        try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
             Toast.makeText(this, "Capodobera salvata!", Toast.LENGTH_SHORT).show();
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(this, "Eroare! Esti prea urat ca sa fii salvat!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -169,22 +180,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            save.setEnabled(true);
-            share.setEnabled(false);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+//            Uri selectedImage = data.getData();
+//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+//            cursor.moveToFirst();
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//            String picturePath = cursor.getString(columnIndex);
+//            cursor.close();
+//            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            save.setEnabled(true);
+//            share.setEnabled(false);
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -201,5 +212,44 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }
