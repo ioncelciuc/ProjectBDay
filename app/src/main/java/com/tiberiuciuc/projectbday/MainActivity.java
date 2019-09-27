@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -23,9 +24,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,12 +41,12 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ColorDialog.ColorDialogListener, SizeDialog.SizeDialogListener {
 
     public static final int MY_PERMISSION_REQUEST = 1;
     public static final int RESULT_LOAD_IMAGE = 2;
 
-    public static Button load, save, share, go;
+    public static Button load, save, share, go, color, size;
 
     TextView textView1, textView2;
 
@@ -52,11 +58,21 @@ public class MainActivity extends AppCompatActivity {
 
     Context context;
 
+    Toolbar toolbar;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+
+        toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -79,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         save = findViewById(R.id.save);
         share = findViewById(R.id.share);
         go = findViewById(R.id.go);
+        color = findViewById(R.id.colour);
+        size = findViewById(R.id.size);
 
         save.setEnabled(false);
         share.setEnabled(false);
@@ -126,13 +144,62 @@ public class MainActivity extends AppCompatActivity {
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView1.setText(editText1.getText().toString());
-                textView2.setText(editText2.getText().toString());
+                textView1.setText(editText1.getText().toString().toUpperCase());
+                textView2.setText(editText2.getText().toString().toUpperCase());
 
                 editText1.setText("");
                 editText2.setText("");
             }
         });
+
+        color.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openColorDialog();
+            }
+        });
+
+        size.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSizeDialog();
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater =getMenuInflater();
+        menuInflater.inflate(R.menu.main_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_exit:
+                {
+                    moveTaskToBack(true);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(1);
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void openColorDialog() {
+        ColorDialog colorDialog = new ColorDialog();
+        colorDialog.show(getSupportFragmentManager(), "COLOR_DIALOG");
+    }
+
+    public void openSizeDialog() {
+        SizeDialog sizeDialog = new SizeDialog();
+        sizeDialog.show(getSupportFragmentManager(), "SIZE_DIALOG");
     }
 
     public static Bitmap getScreenShot(View view) {
@@ -251,5 +318,76 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return inSampleSize;
+    }
+
+    @Override
+    public void applyColor(int position) {
+        switch (position) {
+            case 0:
+                textView1.setTextColor(getResources().getColor(R.color.black));
+                textView2.setTextColor(getResources().getColor(R.color.black));
+                break;
+            case 1:
+                textView1.setTextColor(getResources().getColor(R.color.white));
+                textView2.setTextColor(getResources().getColor(R.color.white));
+                break;
+            case 2:
+                textView1.setTextColor(getResources().getColor(R.color.yellow));
+                textView2.setTextColor(getResources().getColor(R.color.yellow));
+                break;
+            case 3:
+                textView1.setTextColor(getResources().getColor(R.color.colorPrimary));
+                textView2.setTextColor(getResources().getColor(R.color.colorPrimary));
+                break;
+            case 4:
+                textView1.setTextColor(getResources().getColor(R.color.blue));
+                textView2.setTextColor(getResources().getColor(R.color.blue));
+                break;
+            case 5:
+                textView1.setTextColor(getResources().getColor(R.color.red));
+                textView2.setTextColor(getResources().getColor(R.color.red));
+                break;
+            default:
+//                textView1.setTextColor(getResources().getColor(R.color.black));
+//                textView2.setTextColor(getResources().getColor(R.color.black));
+                break;
+        }
+    }
+
+    @Override
+    public void applySize(int position) {
+
+        switch (position) {
+            case 0:
+                textView1.setTextSize(20);
+                textView2.setTextSize(20);
+                break;
+            case 1:
+                textView1.setTextSize(25);
+                textView2.setTextSize(25);
+                break;
+            case 2:
+                textView1.setTextSize(30);
+                textView2.setTextSize(30);
+                break;
+            case 3:
+                textView1.setTextSize(35);
+                textView2.setTextSize(35);
+                break;
+            case 4:
+                textView1.setTextSize(40);
+                textView2.setTextSize(40);
+                break;
+            default:
+//                textView1.setTextSize(30);
+//                textView2.setTextSize(30);
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Toast.makeText(context, "Butonul \"inapoi\" nu merge aici, uai!", Toast.LENGTH_SHORT).show();
     }
 }

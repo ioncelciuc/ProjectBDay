@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/main_toolbar"/>
 
     <LinearLayout
         android:id="@+id/tlay"
@@ -12,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize">
 
         <EditText
             android:id="@+id/editText1"

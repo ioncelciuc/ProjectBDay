@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">ProjectBDay</string>
+    <string-array name="colors_array">
+        <item>Black</item>
+        <item>White</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Red</item>
+    </string-array>
+    <string-array name="size_array">
+        <item>Very Small</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Very Large</item>
+    </string-array>
 </resources>
