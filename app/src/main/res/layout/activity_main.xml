@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <include layout="@layout/main_toolbar"/>
+    <include layout="@layout/main_toolbar" />
 
     <LinearLayout
         android:id="@+id/tlay"
@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/editText1"
@@ -40,22 +40,22 @@
                 android:id="@+id/go"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="TRY"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:text="TRY" />
 
             <Button
                 android:id="@+id/colour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Text Color"/>
+                android:text="Text Color" />
 
             <Button
                 android:id="@+id/size"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Text Size"/>
+                android:text="Text Size" />
 
         </LinearLayout>
 
@@ -105,8 +105,8 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="false"/>
+            android:adjustViewBounds="false"
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/textView1"

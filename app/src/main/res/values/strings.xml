@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectBDay</string>
+    <string name="app_name">Cipa Meme Generator</string>
     <string-array name="colors_array">
         <item>Black</item>
         <item>White</item>

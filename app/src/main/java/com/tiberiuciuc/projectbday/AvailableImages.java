@@ -26,7 +26,8 @@ public class AvailableImages extends AppCompatActivity {
             R.drawable.c36, R.drawable.c37, R.drawable.c38, R.drawable.c39, R.drawable.c40,
             R.drawable.c41, R.drawable.c42, R.drawable.c43, R.drawable.c44, R.drawable.c45,
             R.drawable.c46, R.drawable.c47, R.drawable.c48, R.drawable.c49, R.drawable.c50,
-            R.drawable.c51, R.drawable.c52, R.drawable.c53, R.drawable.c54, R.drawable.c55
+            R.drawable.c51, R.drawable.c52, R.drawable.c53, R.drawable.c54, R.drawable.c55,
+            R.drawable.last
     };
 
     Toolbar toolbar;
@@ -38,7 +39,7 @@ public class AvailableImages extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));
         }
 
         toolbar = findViewById(R.id.toolbar_available_images);

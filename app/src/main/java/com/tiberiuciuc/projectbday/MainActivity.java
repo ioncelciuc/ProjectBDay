@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements ColorDialog.Color
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));
         }
 
         toolbar = findViewById(R.id.toolbar_main);
@@ -336,8 +336,8 @@ public class MainActivity extends AppCompatActivity implements ColorDialog.Color
                 textView2.setTextColor(getResources().getColor(R.color.yellow));
                 break;
             case 3:
-                textView1.setTextColor(getResources().getColor(R.color.colorPrimary));
-                textView2.setTextColor(getResources().getColor(R.color.colorPrimary));
+                textView1.setTextColor(getResources().getColor(R.color.green));
+                textView2.setTextColor(getResources().getColor(R.color.green));
                 break;
             case 4:
                 textView1.setTextColor(getResources().getColor(R.color.blue));
